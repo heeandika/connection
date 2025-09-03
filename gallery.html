@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Sayang kuuuuuuuuu</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #1a237e 0%, #6a1b9a 100%);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container {
+            background: rgba(255,255,255,0.12);
+            border-radius: 24px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            backdrop-filter: blur(8px);
+            padding: 32px 24px;
+            max-width: 900px;
+            width: 100%;
+            margin: 32px 0;
+            box-sizing: border-box;
+            animation: fadeInUp 1.2s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        h1 {
+            color: #fff;
+            margin-bottom: 18px;
+            letter-spacing: 2px;
+            font-size: 2em;
+            text-align: center;
+        }
+        .slider {
+            position: relative;
+            width: 100%;
+            max-width: 340px;
+            margin: 0 auto 24px auto;
+        }
+        .slider-img {
+            display: none;
+            width: 100%;
+            aspect-ratio: 1/1;
+            object-fit: cover;
+            border-radius: 14px;
+            box-shadow: 0 2px 12px 0 rgba(106, 27, 154, 0.18);
+            background: #eee;
+            transition: opacity 0.5s;
+        }
+        .slider-img.active {
+            display: block;
+            opacity: 1;
+        }
+        .slider-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        .slider-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #b39ddb;
+            opacity: 0.6;
+            cursor: pointer;
+            transition: background 0.2s, opacity 0.2s;
+        }
+        .slider-dot.active {
+            background: #fff;
+            opacity: 1;
+        }
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 18px;
+            margin-top: 18px;
+        }
+        .gallery-grid img {
+            width: 100%;
+            aspect-ratio: 1/1;
+            object-fit: cover;
+            border-radius: 14px;
+            box-shadow: 0 2px 12px 0 rgba(106, 27, 154, 0.18);
+            transition: transform 0.2s;
+            background: #eee;
+        }
+        .gallery-grid img:hover {
+            transform: scale(1.04);
+        }
+        .back-btn {
+            display: inline-block;
+            margin-top: 18px;
+            padding: 10px 22px;
+            background: linear-gradient(90deg, #1a237e 60%, #6a1b9a 100%);
+            color: #fff;
+            border: none;
+            border-radius: 14px;
+            font-size: 1em;
+            font-weight: 500;
+            text-decoration: none;
+            box-shadow: 0 2px 12px 0 rgba(106, 27, 154, 0.18);
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s;
+        }
+        .back-btn:hover {
+            background: linear-gradient(90deg, #6a1b9a 60%, #1a237e 100%);
+            transform: translateY(-2px) scale(1.04);
+        }
+        /* Tablet */
+        @media (max-width: 900px) {
+            .container {
+                max-width: 98vw;
+                padding: 18px 2vw;
+            }
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+                gap: 12px;
+            }
+            .slider {
+                max-width: 95vw;
+            }
+        }
+        /* Mobile */
+        @media (max-width: 600px) {
+            .container {
+                padding: 14px 2vw;
+                max-width: 100vw;
+                border-radius: 12px;
+            }
+            h1 {
+                font-size: 1.2em;
+            }
+            .gallery-grid {
+                gap: 10px;
+                grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+            }
+            .slider {
+                max-width: 98vw;
+            }
+        }
+        /* Smallest screens */
+        @media (max-width: 350px) {
+            .container {
+                padding: 6px 1vw;
+            }
+            h1 {
+                font-size: 1em;
+            }
+            .slider {
+                max-width: 100vw;
+            }
+        }
+        /* Touch-friendly dots and buttons */
+        @media (pointer: coarse) {
+            .slider-dot {
+                width: 16px;
+                height: 16px;
+            }
+            .back-btn {
+                padding: 16px 28px;
+                font-size: 1.1em;
+            }
+        }
+        .slider-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(26,35,126,0.7);
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            font-size: 1.5em;
+            cursor: pointer;
+            z-index: 2;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.8;
+        }
+        .slider-arrow.left {
+            left: 8px;
+        }
+        .slider-arrow.right {
+            right: 8px;
+        }
+        .slider-arrow:hover {
+            background: #6a1b9a;
+            opacity: 1;
+        }
+        @media (max-width: 600px) {
+            .slider-arrow {
+                width: 28px;
+                height: 28px;
+                font-size: 1.1em;
+            }
+        }
+        .love {
+            font-size: 2.2em;
+            color: #fff;
+            text-shadow: 0 0 12px #7c4dff;
+            margin-bottom: 12px;
+            animation: heartbeat 1.2s infinite;
+        }
+        @keyframes heartbeat {
+            0%, 100% {
+                transform: scale(1);
+            }
+            10%, 30% {
+                transform: scale(1.18);
+            }
+            20%, 40% {
+                transform: scale(0.95);
+            }
+            50% {
+                transform: scale(1.12);
+            }
+            60% {
+                transform: scale(1);
+            }
+        }
+
+                body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #1a237e 0%, #6a1b9a 100%);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            background: rgba(255,255,255,0.12);
+            border-radius: 24px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            backdrop-filter: blur(8px);
+            padding: 32px 24px;
+            max-width: 400px;
+            width: 100%;
+            margin: 32px 0;
+            box-sizing: border-box;
+            text-align: center;
+            animation: fadeInUp 1.2s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+        h1 {
+            color: #fff;
+            margin-bottom: 18px;
+            letter-spacing: 2px;
+            font-size: 2em;
+        }
+        .love {
+            font-size: 2.2em;
+            color: #fff;
+            text-shadow: 0 0 12px #7c4dff;
+            margin-bottom: 12px;
+            animation: heartbeat 1.2s infinite;
+        }
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1);}
+            10%, 30% { transform: scale(1.18);}
+            20%, 40% { transform: scale(0.95);}
+            50% { transform: scale(1.12);}
+            60% { transform: scale(1);}
+        }
+        .btn {
+            display: inline-block;
+            margin: 10px 8px;
+            padding: 12px 28px;
+            background: linear-gradient(90deg, #1a237e 60%, #6a1b9a 100%);
+            color: #fff;
+            border: none;
+            border-radius: 18px;
+            font-size: 1.1em;
+            font-weight: 500;
+            text-decoration: none;
+            box-shadow: 0 2px 12px 0 rgba(106, 27, 154, 0.18);
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s;
+        }
+        .btn:hover, .btn:active {
+            background: linear-gradient(90deg, #6a1b9a 60%, #1a237e 100%);
+            transform: translateY(-2px) scale(1.04);
+        }
+        .audio-player {
+            margin-top: 18px;
+        }
+        .info {
+            color: #e1bee7;
+            margin: 12px 0 0 0;
+            font-size: 1em;
+            min-height: 1.5em;
+        }
+        .back-btn {
+            margin-top: 22px;
+            padding: 10px 22px;
+            background: linear-gradient(90deg, #1a237e 60%, #6a1b9a 100%);
+            color: #fff;
+            border: none;
+            border-radius: 14px;
+            font-size: 1em;
+            font-weight: 500;
+            text-decoration: none;
+            box-shadow: 0 2px 12px 0 rgba(106, 27, 154, 0.18);
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s;
+            display: inline-block;
+        }
+        .back-btn:hover {
+            background: linear-gradient(90deg, #6a1b9a 60%, #1a237e 100%);
+            transform: translateY(-2px) scale(1.04);
+        }
+        @media (max-width: 500px) {
+            .container { padding: 18px 2vw; max-width: 100vw; border-radius: 14px;}
+            h1 { font-size: 1.15em;}
+            .btn, .back-btn { padding: 10px 12vw; font-size: 1em;}
+        }
+        @media (max-width: 350px) {
+            .container { padding: 8px 1vw;}
+            h1 { font-size: 1em;}
+            .btn, .back-btn { font-size: 0.95em; padding: 8px 6vw;}
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="love" style="font-size:2.2em; text-align:center; margin-bottom:12px; animation:heartbeat 1.2s infinite;">💙💜</div>
+        <h1>Sayang kuuuuuuuuu</h1>
+        <div class="slider">
+            <img src="sayang1.jpg" alt="Foto 1" class="slider-img active">
+            <img src="sayang2.jpg" alt="Foto 2" class="slider-img">
+            <img src="sayang3.jpg" alt="Foto 3" class="slider-img">
+            <img src="sayang4.png" alt="Foto 4" class="slider-img">
+            <img src="sayang5.png" alt="Foto 5" class="slider-img">
+            <div class="slider-dots">
+                <div class="slider-dot active"></div>
+                <div class="slider-dot"></div>
+                <div class="slider-dot"></div>
+                <div class="slider-dot"></div>
+                <div class="slider-dot"></div>
+            </div>
+            <button class="slider-arrow left" aria-label="Sebelumnya">&#8592;</button>
+            <button class="slider-arrow right" aria-label="Selanjutnya">&#8594;</button>
+        </div>
+        <div class="gallery-grid" style="margin-top:0;">
+            <!-- ...existing code... -->
+        </div>
+        <a href="index.html" class="back-btn">Kembali</a>
+    </div>
+
+        <div class="container">
+        <div class="love">💙💜</div>
+        <h1>Rekaman Untukmu</h1>
+        <div class="info" id="info">Tekan tombol untuk mulai merekam suara spesialmu!</div>
+        <button class="btn" id="recordBtn">Mulai Rekam</button>
+        <button class="btn" id="stopBtn" disabled>Stop</button>
+        <div class="audio-player" id="audioPlayer"></div>
+        <div class="audio-player" style="margin-top:18px;">
+            <div style="color:#e1bee7; margin-bottom:4px;">Pesan suara spesial untuk Qinanku:</div>
+            <audio controls>
+                <source src="Khususbuatqinan1.m4a" type="audio/mp4">
+                Browser kamu tidak mendukung audio.
+            </audio>
+            <audio controls>
+                <source src="Khususbuatqinan.m4a" type="audio/mp4">
+                Browser kamu tidak mendukung audio.
+            </audio>
+        </div>
+        <a href="video.html" class="gallery-btn">Jangan Lupa Nonton</a>
+    </div>
+    <script>
+        const images = document.querySelectorAll('.slider-img');
+        const dots = document.querySelectorAll('.slider-dot');
+        const leftBtn = document.querySelector('.slider-arrow.left');
+        const rightBtn = document.querySelector('.slider-arrow.right');
+        let current = 0;
+        let interval = setInterval(nextSlide, 2200);
+
+        function showSlide(idx) {
+            images[current].classList.remove('active');
+            dots[current].classList.remove('active');
+            current = (idx + images.length) % images.length;
+            images[current].classList.add('active');
+            dots[current].classList.add('active');
+        }
+
+        function nextSlide() {
+            showSlide(current + 1);
+        }
+
+        function prevSlide() {
+            showSlide(current - 1);
+        }
+
+        rightBtn.addEventListener('click', () => {
+            nextSlide();
+            resetInterval();
+        });
+        leftBtn.addEventListener('click', () => {
+            prevSlide();
+            resetInterval();
+        });
+        dots.forEach((dot, idx) => {
+            dot.addEventListener('click', () => {
+                showSlide(idx);
+                resetInterval();
+            });
+        });
+
+        function resetInterval() {
+            clearInterval(interval);
+            interval = setInterval(nextSlide, 2200);
+        }
+
+        // Optional: swipe support for mobile
+        let startX = null;
+        document.querySelector('.slider').addEventListener('touchstart', e => {
+            startX = e.touches[0].clientX;
+        });
+        document.querySelector('.slider').addEventListener('touchend', e => {
+            if (startX === null) return;
+            let endX = e.changedTouches[0].clientX;
+            if (endX - startX > 40) {
+                prevSlide();
+                resetInterval();
+            } else if (startX - endX > 40) {
+                nextSlide();
+                resetInterval();
+            }
+            startX = null;
+        });
+
+                // filepath: c:\for qinan\connection\rekaman.html
+        let mediaRecorder, audioChunks = [];
+        const recordBtn = document.getElementById('recordBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        const deleteBtn = document.getElementById('deleteBtn');
+        const info = document.getElementById('info');
+        const audioPlayer = document.getElementById('audioPlayer');
+
+        recordBtn.onclick = async () => {
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                info.textContent = "Browser tidak mendukung rekaman suara.";
+                return;
+            }
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                audioChunks = [];
+                mediaRecorder.ondataavailable = e => {
+                    if (e.data.size > 0) audioChunks.push(e.data);
+                };
+                mediaRecorder.onstart = () => {
+                    info.textContent = "Sedang merekam... Tekan Stop jika sudah selesai.";
+                    recordBtn.disabled = true;
+                    stopBtn.disabled = false;
+                    audioPlayer.innerHTML = "";
+                    if (deleteBtn) deleteBtn.style.display = "none";
+                };
+                mediaRecorder.onstop = () => {
+                    info.textContent = "Rekaman selesai! Putar ulang atau rekam lagi.";
+                    recordBtn.disabled = false;
+                    stopBtn.disabled = true;
+                    const blob = new Blob(audioChunks, { type: 'audio/webm' });
+                    const url = URL.createObjectURL(blob);
+                    audioPlayer.innerHTML = `<audio controls src="${url}"></audio>`;
+                    showDeleteBtn();
+                };
+                mediaRecorder.start();
+            } catch (err) {
+                info.textContent = "Gagal mengakses mikrofon.";
+            }
+        };
+
+        stopBtn.onclick = () => {
+            if (mediaRecorder && mediaRecorder.state === "recording") {
+                mediaRecorder.stop();
+            }
+        };
+
+        // Tampilkan tombol hapus setelah rekaman selesai
+        if (deleteBtn) {
+            deleteBtn.onclick = () => {
+                audioPlayer.innerHTML = "";
+                deleteBtn.style.display = "none";
+                info.textContent = "Rekaman dihapus. Silakan rekam ulang pesanmu!";
+            };
+        }
+
+        // Tampilkan tombol hapus jika ada rekaman
+        function showDeleteBtn() {
+            if (deleteBtn) deleteBtn.style.display = "inline-block";
+        }
+
+    </script>
+    <style>
+        /* ...existing code... */
+        .love {
+            font-size: 2.2em;
+            color: #fff;
+            text-shadow: 0 0 12px #7c4dff;
+            margin-bottom: 12px;
+            animation: heartbeat 1.2s infinite;
+        }
+        @keyframes heartbeat {
+            0%, 100% {
+                transform: scale(1);
+            }
+            10%, 30% {
+                transform: scale(1.18);
+            }
+            20%, 40% {
+                transform: scale(0.95);
+            }
+            50% {
+                transform: scale(1.12);
+            }
+            60% {
+                transform: scale(1);
+            }
+        }
+    </style>
+</body>
+</html>
